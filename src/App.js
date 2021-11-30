@@ -1,5 +1,7 @@
 import { useState } from "react";
-import FormInput from "./components/FormInput";
+import Register from "./components/RegisterForm/Register";
+import Login from "./components/LoginForm/Login";
+import WelcomeMessage from "./components/WelcomeMessage/Welcome";
 import "./App.css";
 
 const App = () => {
@@ -8,86 +10,97 @@ const App = () => {
     email: "",
     birthday: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    registered: false,
+    logged: false
   });
 
-  const inputs = [
-    {
-      id: 1,
-      name: "username",
-      type: "text",
-      placeholder: "Username",
-      errorMessage:
-        "Username Should be 3-16 characters & shouldn't include an special Character!",
-      label: "Username",
-      pattern: "^[A-Za-z0-9]{3,16}$",
-      required: true
-    },
-    {
-      id: 2,
-      name: "email",
-      type: "email",
-      placeholder: "Email",
-      errorMessage: "It Should be a valid email address!",
-      label: "Email",
-      required: true
-    },
-    {
-      id: 3,
-      name: "birthday",
-      type: "date",
-      placeholder: "Birthday",
-      errorMessage: "",
-      label: "Birthday"
-    },
-    {
-      id: 4,
-      name: "password",
-      type: "password",
-      placeholder: "Password",
-      errorMessage:
-        "Password should be 8-20 characters, & include at least 1 letter, 1 number and 1 speccial character! ",
-      label: "Password",
-      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      required: true
-    },
-    {
-      id: 5,
-      name: "confirmPassword",
-      type: "password",
-      placeholder: "Confirm Password",
-      errorMessage: "Password don't match!",
-      label: "Confirm Password",
-      pattern: values.password,
-      required: true
-    }
-  ];
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-  };
+  /*
+  function clearFields(event) {
+    // we have to convert event.target to array
+    // we use from method to convert event.target to array
+    // after that we will use forEach function to go through every input to clear it
+    Array.from(event.target).forEach((input) => (input.value = ""));
+  }
+  */
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  return (
-    <div className="app">
-      <form onSubmit={submitHandler}>
-        <h1>Register</h1>
-        {inputs.map((inp) => (
-          <FormInput
-            key={inp.id}
-            {...inp}
-            value={values[inp.name]}
-            onChangeHandler={onChange}
-          />
-        ))}
+  const {
+    username,
+    email,
+    birthday,
+    password,
+    confirmPassword,
+    registered,
+    logged
+  } = values;
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
+  const users_data = [];
+
+  const onSubmitRegister = (event) => {
+    event.preventDefault();
+    if (!username || !email || !password || !confirmPassword) return;
+
+    setValues({ ...values, registered: true, logged: false });
+
+    const user_data = {
+      name: username,
+      email: email,
+      birthday: birthday,
+      password: password,
+      confirmPassword: confirmPassword,
+      registered: registered,
+      logged: logged
+    };
+
+    users_data.push(user_data);
+
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify(users_data));
+    } else {
+      let data = JSON.parse(localStorage.getItem("users"));
+      data.push(user_data);
+      localStorage.setItem("users", JSON.stringify(data));
+    }
+
+    console.log(values);
+
+    // <<<<< For Clear Fields After submit >>>>>
+    // clearFields(event);
+    // event.target.reset();
+  };
+
+  const onSubmitLogin = (event) => {
+    event.preventDefault();
+
+    if (!localStorage.getItem("users") || !email || !password) return;
+
+    let all_users = JSON.parse(localStorage.getItem("users"));
+
+    all_users.forEach((acc) => {
+      if (email === acc.email && password === acc.password) {
+        setValues({ ...values, logged: true });
+        localStorage.setItem("loggedAccount", JSON.stringify(acc));
+      }
+    });
+  };
+
+  const render = () => {
+    if (logged)
+      return (
+        <WelcomeMessage
+          name={JSON.parse(localStorage.getItem("loggedAccount")).name}
+        />
+      );
+    else if (registered)
+      return <Login onSubmit={onSubmitLogin} onChange={onChange} />;
+    else return <Register onSubmit={onSubmitRegister} onChange={onChange} />;
+  };
+
+  return <div>{render()}</div>;
 };
 
 export default App;
