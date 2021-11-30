@@ -19,7 +19,8 @@ span {
 
 label,
 h1,
-code {
+code,
+span {
   font-family: cursive;
 }
 
