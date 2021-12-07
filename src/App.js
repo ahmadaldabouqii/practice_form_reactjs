@@ -12,7 +12,7 @@ const App = () => {
     password: "",
     confirmPassword: "",
     registered: false,
-    logged: false
+    logged: false,
   });
 
   /*
@@ -35,7 +35,7 @@ const App = () => {
     password,
     confirmPassword,
     registered,
-    logged
+    logged,
   } = values;
 
   const users_data = [];
@@ -53,7 +53,7 @@ const App = () => {
       password: password,
       confirmPassword: confirmPassword,
       registered: registered,
-      logged: logged
+      logged: logged,
     };
 
     users_data.push(user_data);
@@ -65,8 +65,6 @@ const App = () => {
       data.push(user_data);
       localStorage.setItem("users", JSON.stringify(data));
     }
-
-    console.log(values);
 
     // <<<<< For Clear Fields After submit >>>>>
     // clearFields(event);
@@ -97,7 +95,16 @@ const App = () => {
       );
     else if (registered)
       return <Login onSubmit={onSubmitLogin} onChange={onChange} />;
-    else return <Register onSubmit={onSubmitRegister} onChange={onChange} />;
+    else
+      return (
+        <Register
+          onSubmit={onSubmitRegister}
+          onChange={onChange}
+          values={values}
+          setValues={setValues}
+          password={password}
+        />
+      );
   };
 
   return <div>{render()}</div>;

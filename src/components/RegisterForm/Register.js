@@ -1,7 +1,7 @@
 import FormInput from "../InputField/FormInput";
 import "./Register.css";
 
-const Register = ({ onSubmit, onChange, ...values }) => {
+const Register = ({ onSubmit, onChange, password, ...values }) => {
   const inputs = [
     {
       id: 1,
@@ -12,7 +12,7 @@ const Register = ({ onSubmit, onChange, ...values }) => {
         "Username Should be 3-16 characters & shouldn't include an special Character!",
       label: "Username",
       pattern: "^[A-Za-z0-9]{3,16}$",
-      required: true
+      required: true,
     },
     {
       id: 2,
@@ -21,7 +21,7 @@ const Register = ({ onSubmit, onChange, ...values }) => {
       placeholder: "Email",
       errorMessage: "It Should be a valid email address!",
       label: "Email",
-      required: true
+      required: true,
     },
     {
       id: 3,
@@ -29,7 +29,7 @@ const Register = ({ onSubmit, onChange, ...values }) => {
       type: "date",
       placeholder: "Birthday",
       errorMessage: "",
-      label: "Birthday"
+      label: "Birthday",
     },
     {
       id: 4,
@@ -40,7 +40,7 @@ const Register = ({ onSubmit, onChange, ...values }) => {
         "Password should be 8-20 characters, & include at least 1 letter, 1 number and 1 speccial character! ",
       label: "Password",
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      required: true
+      required: true,
     },
     {
       id: 5,
@@ -49,9 +49,9 @@ const Register = ({ onSubmit, onChange, ...values }) => {
       placeholder: "Confirm Password",
       errorMessage: "Password don't match!",
       label: "Confirm Password",
-      pattern: values.password,
-      required: true
-    }
+      pattern: password,
+      required: true,
+    },
   ];
 
   return (

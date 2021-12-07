@@ -10,7 +10,7 @@ const LoginForm = ({ onChange, onSubmit, ...values }) => {
       placeholder: "Email",
       errorMessage: "Incorrect Email!!",
       label: "Email",
-      required: true
+      required: true,
     },
     {
       id: 2,
@@ -19,8 +19,8 @@ const LoginForm = ({ onChange, onSubmit, ...values }) => {
       placeholder: "Password",
       errorMessage: "incorrect password!",
       label: "Password",
-      required: true
-    }
+      required: true,
+    },
   ];
 
   return (
